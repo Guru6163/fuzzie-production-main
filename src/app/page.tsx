@@ -32,7 +32,7 @@ export default function Home() {
                   </span>
                 </Button>
                 <h1 className="text-4xl md:text-6xl font-bold leading-tight bg-gradient-to-b from-gray-800 to-gray-400 text-transparent bg-clip-text max-w-3xl">
-                  Automate Your Work With Fuzzie
+                  Automate Your Work With GumDupe
                 </h1>
               </div>
             }
