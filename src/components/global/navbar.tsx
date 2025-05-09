@@ -1,53 +1,82 @@
-import Image from 'next/image'
+'use client'
+
+import React, { useState } from 'react'
 import Link from 'next/link'
-import React from 'react'
-import { MenuIcon } from 'lucide-react'
-import { UserButton, currentUser } from '@clerk/nextjs'
+import { MenuIcon, XIcon } from 'lucide-react'
+import { UserButton, useUser } from '@clerk/nextjs'
 
-type Props = {}
+const Navbar = () => {
+  const { user } = useUser()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-const Navbar = async (props: Props) => {
-  const user = await currentUser()
+  const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen)
+
+  const navItems = [
+    { label: 'Products', href: '#' },
+    { label: 'Pricing', href: '#' },
+    { label: 'Clients', href: '#' },
+    { label: 'Resources', href: '#' },
+    { label: 'Documentation', href: '#' },
+    { label: 'Enterprise', href: '#' },
+  ]
+
   return (
-    <header className="fixed right-0 left-0 top-0 py-4 px-4 bg-black/40 backdrop-blur-lg z-[100] flex items-center border-b-[1px] border-neutral-900 justify-between">
-      <aside className="flex items-center gap-[2px]">
-        <p className="text-3xl font-bold">GumDupe</p>
-      </aside>
-      <nav className="absolute left-[50%] top-[50%] transform translate-x-[-50%] translate-y-[-50%] hidden md:block">
-        <ul className="flex items-center gap-4 list-none">
-          <li>
-            <Link href="#">Products</Link>
-          </li>
-          <li>
-            <Link href="#">Pricing</Link>
-          </li>
-          <li>
-            <Link href="#">Clients</Link>
-          </li>
-          <li>
-            <Link href="#">Resources</Link>
-          </li>
-          <li>
-            <Link href="#">Documentation</Link>
-          </li>
-          <li>
-            <Link href="#">Enterprise</Link>
-          </li>
-        </ul>
-      </nav>
-      <aside className="flex items-center gap-4">
-        <Link
-          href="/dashboard"
-          className="relative inline-flex h-10 overflow-hidden rounded-full p-[2px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
-        >
-          <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-          <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        {/* Logo */}
+        <div className="text-2xl font-bold text-gray-900">GumDupe</div>
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">
+          {navItems.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className="hover:text-blue-600 transition-colors"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Right Actions */}
+        <div className="flex items-center gap-4">
+          <Link
+            href="/dashboard"
+            className="bg-gradient-to-tr from-blue-500 to-indigo-600 text-white text-sm font-medium px-4 py-2 rounded-full hover:opacity-90 transition-all shadow"
+          >
             {user ? 'Dashboard' : 'Get Started'}
-          </span>
-        </Link>
-        {user ? <UserButton afterSignOutUrl="/" /> : null}
-        <MenuIcon className="md:hidden" />
-      </aside>
+          </Link>
+          {user ? <UserButton afterSignOutUrl="/" /> : null}
+
+          {/* Mobile Menu Icon */}
+          <button
+            onClick={toggleMenu}
+            className="md:hidden text-gray-700 hover:text-gray-900 focus:outline-none"
+            aria-label="Toggle Menu"
+          >
+            {isMobileMenuOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-100 shadow-sm px-4 pb-4">
+          <nav className="flex flex-col gap-3 mt-2 text-gray-700 text-sm">
+            {navItems.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="hover:text-blue-600 transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
     </header>
   )
 }
