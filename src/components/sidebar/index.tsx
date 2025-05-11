@@ -47,7 +47,7 @@ const MenuOptions = (props: Props) => {
                     >
                       <menuItem.Component
                         selected={pathName === menuItem.href}
-                        className="w-5 h-5"
+                        
                       />
                     </Link>
                   </li>
