@@ -156,13 +156,6 @@ export const CONNECTIONS: Connection[] = [
     alwaysTrue: true,
   },
   {
-    title: 'Discord',
-    description: 'Connect your discord to send notification and messages',
-    image: '/discord.png',
-    connectionKey: 'discordNode',
-    accessTokenKey: 'webhookURL',
-  },
-  {
     title: 'Notion',
     description: 'Create entries in your notion dashboard and automate tasks.',
     image: '/notion.png',

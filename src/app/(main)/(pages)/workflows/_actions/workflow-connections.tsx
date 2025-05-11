@@ -149,22 +149,39 @@ export const onGetWorkflows = async () => {
 }
 
 export const onCreateWorkflow = async (name: string, description: string) => {
-  const user = await currentUser()
+  try {
+    const user = await currentUser();
+    const clerkId = user?.id;
 
-  if (user) {
-    //create new workflow
+    if (!clerkId) {
+      return { message: "User not authenticated" };
+    }
+
+    // Check if user exists in the DB
+    const existingUser = await db.user.findUnique({
+      where: { clerkId },
+    });
+
+    if (!existingUser) {
+      return { message: "User not found in database" };
+    }
+
     const workflow = await db.workflows.create({
       data: {
-        userId: user.id,
+        userId: clerkId,
         name,
         description,
       },
-    })
+    });
 
-    if (workflow) return { message: 'workflow created' }
-    return { message: 'Oops! try again' }
+    return { message: "Workflow created", workflow };
+  } catch (error) {
+    console.error("Error creating workflow:", error);
+    return { message: "Server error. Please try again later." };
   }
-}
+};
+
+
 
 export const onGetNodesEdges = async (flowId: string) => {
   const nodesEdges = await db.workflows.findUnique({
