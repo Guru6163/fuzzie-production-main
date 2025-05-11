@@ -1,5 +1,7 @@
 import { google } from 'googleapis'
-import { auth, clerkClient } from '@clerk/nextjs'
+import { auth } from '@clerk/nextjs/server'
+import { clerkClient } from '@clerk/clerk-sdk-node'
+
 import { NextResponse } from 'next/server'
 import { v4 as uuidv4 } from 'uuid'
 import { db } from '@/lib/db'
@@ -13,7 +15,7 @@ export async function GET() {
     process.env.OAUTH2_REDIRECT_URI
   )
 
-  const { userId } = auth()
+  const { userId } = await auth()
   console.log('Authenticated user ID:', userId)
 
   if (!userId) {
@@ -28,7 +30,7 @@ export async function GET() {
     )
     console.log('Clerk OAuth token response:', clerkResponse)
 
-    const accessToken = clerkResponse[0]?.token
+    const accessToken = clerkResponse.data[0]?.token
     if (!accessToken) {
       throw new Error('Access token not found')
     }
