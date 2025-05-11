@@ -8,6 +8,7 @@ const isPublicRoute = createRouteMatcher([
 ])
 
 const isIgnoredRoute = createRouteMatcher([
+ '/api/clerk-webhook',
   '/api/auth/callback/discord',
   '/api/auth/callback/notion',
   '/api/auth/callback/slack',
