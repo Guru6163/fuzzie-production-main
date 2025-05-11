@@ -27,5 +27,11 @@ export default clerkMiddleware(async (auth, req) => {
 })
 
 export const config = {
-  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
+  matcher: [
+    // Exclude ignored routes from middleware
+    '/((?!.*\\..*|_next|api/clerk-webhook|api/auth/callback/discord|api/auth/callback/notion|api/auth/callback/slack|api/flow|api/cron/wait).*)',
+    '/',
+    '/(api|trpc)(.*)',
+  ],
 }
+
